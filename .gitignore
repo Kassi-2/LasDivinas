@@ -1,0 +1,25 @@
+
+# Ignorar entorno virtual
+venv/
+.venv/
+
+# Ignorar archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Ignorar configuraciones de IDEs
+.vscode/
+.idea/
+
+# Ignorar archivos de configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de log y caché
+*.log
+.cache/
+
+# Otras configuraciones específicas de tu proyecto
+python
+# Mantén el archivo requirements.txt en el repositorio
+!requirements.txt
