@@ -15,9 +15,15 @@ fps= 60
 amarillo= (255,255,0)
 rojo= (255,0,0)
 
+samuraiTamaño= 200
+samuraiData= [samuraiTamaño]
+
 fondo= pygame.image.load("assets/socompa-pano.jpg").convert_alpha()
 
 hector= pygame.image.load("assets/Hector-Osandon-scaled.jpg").convert_alpha()
+samurai= pygame.image.load("assets/samurai.png").convert_alpha()
+
+samuraiPasosAnimacion=[6,6,6,2,8,2,8,4,4]
 
 def dibujarFondo():
     fondoEscalado= pygame.transform.scale(fondo,(anchoPantalla,largoPantalla))
@@ -28,8 +34,8 @@ def dibujarVida(vida, x, y):
     pygame.draw.rect(pantalla, rojo, (x,y, 400, 30))
     pygame.draw.rect(pantalla, amarillo, (x,y, 400 * radio, 30))
 
-peleador1= Peleador(200,310)
-peleador2= Peleador(700,310)
+peleador1= Peleador(200,310, samuraiData, samurai, samuraiPasosAnimacion)
+peleador2= Peleador(700,310, samuraiData, samurai, samuraiPasosAnimacion)
 
 run= True
 
