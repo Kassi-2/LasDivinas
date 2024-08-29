@@ -16,7 +16,9 @@ amarillo= (255,255,0)
 rojo= (255,0,0)
 
 samuraiTamaño= 200
-samuraiData= [samuraiTamaño]
+samuraiEscalado= 3.5
+samuraiOffset= [90,70]
+samuraiData= [samuraiTamaño, samuraiEscalado, samuraiOffset]
 
 fondo= pygame.image.load("assets/socompa-pano.jpg").convert_alpha()
 
@@ -47,6 +49,8 @@ while run:
 
     peleador1.movimiento()
     peleador2.movimiento()
+
+    peleador1.actualizar()
 
     dibujarVida(peleador1.vida, 20 ,20)
     dibujarVida(peleador2.vida, 540, 20)
