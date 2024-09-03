@@ -1,7 +1,7 @@
 import socket
 import threading
 
-server = "localhost"
+server = "0.0.0.0"
 port = 5050
 server_ip = socket.gethostbyname(server)
 

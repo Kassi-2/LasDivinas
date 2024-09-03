@@ -3,7 +3,7 @@ import socket
 from peleador import Peleador
 
 #CONEXIOOOOON
-server = '127.0.0.1'
+server = '192.168.1.104' #IP del compu
 port = 5050
 c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
