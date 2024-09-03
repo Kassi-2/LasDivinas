@@ -1,5 +1,23 @@
 import pygame
+import socket
 from peleador import Peleador
+
+#CONEXIOOOOON
+server = '127.0.0.1'
+port = 5050
+c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    c.connect((server, port))
+    print("Conexión exitosa")
+except socket.error:
+    print("Error")
+    exit()
+
+jugadorId = c.recv(1024).decode('utf-8')
+print("Entró el jugador {jugadorId}")
+
+
+#JUEGOOOO
 
 pygame.init()
 
@@ -49,8 +67,11 @@ def dibujarVida(vida, x, y):
     pygame.draw.rect(pantalla, rojo, (x,y, 400, 30))
     pygame.draw.rect(pantalla, amarillo, (x,y, 400 * radio, 30))
 
-peleador1= Peleador(1, 200,310, samuraiData, samurai, samuraiPasosAnimacion, False)
-peleador2= Peleador(2, 700,310, samuraiData, samurai, samuraiPasosAnimacion, True)
+peleadores={0: Peleador(1, 200,310, samuraiData, samurai, samuraiPasosAnimacion, False),
+ 1: Peleador(2, 700,310, samuraiData, samurai, samuraiPasosAnimacion, True)} 
+
+peleador1 = peleadores[int(jugadorId)]
+peleador2= peleadores[1-int(jugadorId)]
 
 run= True
 
@@ -63,6 +84,22 @@ while run:
     if cuentaInicio<=0:
         peleador1.move(anchoPantalla, largoPantalla, pantalla, peleador2, finRonda)
         peleador2.move(anchoPantalla, largoPantalla, pantalla, peleador1, finRonda)
+
+        posicion = f"{jugadorId}:{peleador1.rect.x},{peleador1.rect.y}"
+        c.send(posicion.encode())
+        try:
+           data= c.recv(1024).decode('utf-8')
+           if data:
+              jugadorId2, coords= data.split(":")
+              x, y = map(int, coords.split(","))
+              peleador2.rect.x=x
+              peleador2.rect.y=y
+           else:
+              print("Ya no hay server")
+              break
+        except Exception:
+           print("Error")
+           break
     else:
         dibujarCuentaInicio(str(cuentaInicio), font, rojo, anchoPantalla/2, largoPantalla/3)
         if(pygame.time.get_ticks()-actualizarCuenta)>=1000:
@@ -98,3 +135,6 @@ while run:
             run= False
 
     pygame.display.update()
+
+pygame.quit()
+c.close()

@@ -1,43 +1,34 @@
 import socket
 import threading
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-server = "0.0.0.0" #??????revisar
-port= 5050
+server = "localhost"
+port = 5050
 server_ip = socket.gethostbyname(server)
-try:
-    s.bind((server, port))
-except socket.error as e:
-    print(str(e))
 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((server_ip, port))
 s.listen(2)
 print("Esperando conexión...")
 
-currentId = "0"
 pos = ["0:50,50", "1:100,100"]
-def threaded_client(conn):
-    global currentId, pos
-    conn.send(str.encode(currentId))
-    currentId = "1"
-    reply= ''
+
+def threaded_client(conn, player_id):
+    conn.send(str.encode(player_id))
     while True:
         try:
-            data= conn.recv(1024)
-            reply = data.decode('utf-8')
+            data = conn.recv(1024)
             if not data:
-                conn.send(str.encode("Chaooo"))
                 break
-            else:
-                print("Recieved"+ reply)
-                arr=reply.split(":")
-                id = int(arr[0])
-                pos[id]=reply
-
-                if id == 0: nid=1
-                if id == 1: nid=0
-                reply = pos[nid][:]
-                print("Sending: " + reply)
-                conn.sendall(str.encode(reply))
+            pos[int(player_id)] = data.decode('utf-8')
+            player2_id = 1 - int(player_id)
+            conn.sendall(str.encode(pos[player2_id]))
         except:
             break
+    conn.close()
+
+current_id = 0
+while True:
+    conn, addr = s.accept()
+    print(f"Conectado a: {addr}")
+    threading.Thread(target=threaded_client, args=(conn, str(current_id))).start()
+    current_id = 1 - current_id
