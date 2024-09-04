@@ -10,7 +10,7 @@ s.bind((server_ip, port))
 s.listen(2)
 print("Esperando conexión...")
 
-pos = ["0:50,50", "1:100,100"]
+pos = ["0:50,50:100", "1:100,100:100"]
 
 def threaded_client(conn, player_id):
     conn.send(str.encode(player_id))
@@ -20,6 +20,7 @@ def threaded_client(conn, player_id):
             if not data:
                 break
             pos[int(player_id)] = data.decode('utf-8')
+            print(pos)
             player2_id = 1 - int(player_id)
             conn.sendall(str.encode(pos[player2_id]))
         except:

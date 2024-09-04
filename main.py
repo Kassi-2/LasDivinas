@@ -3,7 +3,7 @@ import socket
 from peleador import Peleador
 
 #CONEXIOOOOON
-server = '192.168.1.104' #IP del compu
+server = '172.20.10.3' #IP del compu
 port = 5050
 c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
@@ -14,7 +14,7 @@ except socket.error:
     exit()
 
 jugadorId = c.recv(1024).decode('utf-8')
-print("Entró el jugador {jugadorId}")
+print(f"Entró el jugador {jugadorId}")
 
 
 #JUEGOOOO
@@ -36,7 +36,7 @@ finRonda= False
 finRondaEnfriamiento= 2000
 
 amarillo= (255,255,0)
-rojo= (255,0,0)
+rojo= (255,0,170)
 
 samuraiTamaño= 200
 samuraiEscalado= 3.5
@@ -83,17 +83,19 @@ while run:
 
     if cuentaInicio<=0:
         peleador1.move(anchoPantalla, largoPantalla, pantalla, peleador2, finRonda)
-        peleador2.move(anchoPantalla, largoPantalla, pantalla, peleador1, finRonda)
+        #peleador2.move(anchoPantalla, largoPantalla, pantalla, peleador1, finRonda)
 
-        posicion = f"{jugadorId}:{peleador1.rect.x},{peleador1.rect.y}"
+        posicion = f"{jugadorId}:{peleador1.rect.x},{peleador1.rect.y}:{peleador1.vida}"
+        print(posicion)
         c.send(posicion.encode())
         try:
            data= c.recv(1024).decode('utf-8')
            if data:
-              jugadorId2, coords= data.split(":")
+              jugadorId2, coords, vidaJugador2= data.split(":")
               x, y = map(int, coords.split(","))
               peleador2.rect.x=x
               peleador2.rect.y=y
+              peleador2.vida=int(vidaJugador2)
            else:
               print("Ya no hay server")
               break

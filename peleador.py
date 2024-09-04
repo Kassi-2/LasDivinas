@@ -22,6 +22,14 @@ class Peleador():
         self.vel_y= 0
         self.player = jugador
         self.flip = flip
+    
+    def __repr__(self):
+        # Obtener el nombre de la clase
+        class_name = self.__class__.__name__
+        # Obtener los atributos de la clase
+        attributes = ', '.join([f'{attr}={getattr(self, attr)!r}' for attr in self.__dict__])
+        return f"{attributes}"
+
 
     def cargarImagenes(self, hoja, pasosAnimacion):
         listaAnimacion=[]
