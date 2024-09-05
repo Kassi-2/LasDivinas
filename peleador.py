@@ -17,6 +17,7 @@ class Peleador():
         self.tipoAtaque=0
         self.enfriamientoAtaque=0
         self.golpe= False
+        self.dañoHecho=0
         self.vida= 100
         self.vivo= True
         self.vel_y= 0
@@ -136,12 +137,14 @@ class Peleador():
     def attack(self, surface, target):
         attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
         self.atacar= True
+        print(target)
         if attacking_rect.colliderect(target.rect):
             print("AUCH!")
-            target.hit =True
+            #target.golpe =True
             target.vida -=10
             print("-10")
-        pygame.draw.rect(surface, (0,255,0), attacking_rect)
+            self.dañoHecho = 10
+        #pygame.draw.rect(surface, (0,255,0), attacking_rect)
 
     def actualizar(self):
         if self.vida<=0:
@@ -187,5 +190,5 @@ class Peleador():
 
     def dibujar(self, pantalla):
         img= pygame.transform.flip(self.imagen, self.flip, False)
-        pygame.draw.rect(pantalla,(255,0,0), self.rect)
+       # pygame.draw.rect(pantalla,(255,0,0), self.rect)
         pantalla.blit(img, (self.rect.x-(self.offset[0]*self.imagenEscalada),self.rect.y-(self.offset[1]*self.imagenEscalada)))

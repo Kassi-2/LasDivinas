@@ -10,7 +10,7 @@ s.bind((server_ip, port))
 s.listen(2)
 print("Esperando conexión...")
 
-pos = ["0:50,50:100", "1:100,100:100"]
+pos = ["0:50,50:100:0", "1:100,100:100:0"]
 
 def threaded_client(conn, player_id):
     conn.send(str.encode(player_id))

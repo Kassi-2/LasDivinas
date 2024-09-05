@@ -3,7 +3,7 @@ import socket
 from peleador import Peleador
 
 #CONEXIOOOOON
-server = '172.20.10.3' #IP del compu
+server = '192.168.1.123' #IP del compu
 port = 5050
 c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
@@ -82,20 +82,41 @@ while run:
     dibujarFondo()
 
     if cuentaInicio<=0:
-        peleador1.move(anchoPantalla, largoPantalla, pantalla, peleador2, finRonda)
-        #peleador2.move(anchoPantalla, largoPantalla, pantalla, peleador1, finRonda)
+        print(jugadorId)
 
-        posicion = f"{jugadorId}:{peleador1.rect.x},{peleador1.rect.y}:{peleador1.vida}"
-        print(posicion)
+        if jugadorId=="1":
+          peleador1.move(anchoPantalla, largoPantalla, pantalla, peleador2, finRonda)
+          dañoHecho=peleador1.dañoHecho
+          posicion = f"{jugadorId}:{peleador1.rect.x},{peleador1.rect.y}:{peleador2.vida}:{dañoHecho}"
+        elif jugadorId=="0":
+           peleador2.move(anchoPantalla, largoPantalla, pantalla, peleador1, finRonda)
+           dañoHecho=peleador2.dañoHecho
+           posicion = f"{jugadorId}:{peleador2.rect.x},{peleador2.rect.y}:{peleador1.vida}:{dañoHecho}"
+        
         c.send(posicion.encode())
+        if jugadorId=="1":
+           peleador1.dañoHecho=0
+        elif jugadorId=="0":
+           peleador2.dañoHecho=0
         try:
            data= c.recv(1024).decode('utf-8')
            if data:
-              jugadorId2, coords, vidaJugador2= data.split(":")
+              jugadorId2, coords, vidaJugador2, dañoRecibido= data.split(":")
+              print(data)
               x, y = map(int, coords.split(","))
-              peleador2.rect.x=x
-              peleador2.rect.y=y
-              peleador2.vida=int(vidaJugador2)
+              vidaJugador2= int(vidaJugador2)
+              dañoRecibido=int(dañoRecibido)
+              if jugadorId2!=jugadorId:
+                if jugadorId=="1":
+                  peleador2.rect.x=x
+                  peleador2.rect.y=y
+                  peleador2.vida=vidaJugador2
+                  peleador1.vida-=dañoRecibido
+                elif jugadorId=="0":
+                  peleador1.rect.x=x
+                  peleador1.rect.y=y
+                  peleador1.vida=vidaJugador2
+                  peleador2.vida-=dañoRecibido
            else:
               print("Ya no hay server")
               break
