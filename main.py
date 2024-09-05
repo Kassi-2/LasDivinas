@@ -46,7 +46,6 @@ samuraiData= [samuraiTamaño, samuraiEscalado, samuraiOffset]
 fondo= pygame.image.load("assets/socompa-pano.jpg").convert_alpha()
 victoria= pygame.image.load("assets/victoria.png").convert_alpha()
 
-hector= pygame.image.load("assets/Hector-Osandon-scaled.jpg").convert_alpha()
 samurai= pygame.image.load("assets/samurai.png").convert_alpha()
 
 font= pygame.font.Font("assets/Verve.ttf", 80)
